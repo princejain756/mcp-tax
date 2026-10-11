@@ -2,6 +2,8 @@
 
 **How many tokens do your MCP servers burn before you type a word?**
 
+![mcp-tax](social.png)
+
 Every tool, prompt and resource an MCP server exposes gets serialized into your
 model's context window. Add a few servers and the meter is already running.
 
