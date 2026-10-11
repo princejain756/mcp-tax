@@ -4,7 +4,9 @@
   "description": "How many tokens your MCP servers burn before you type a word",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "prepare": "tsc"
   },
   "keywords": [],
   "author": "",
@@ -19,7 +21,7 @@
   },
   "devDependencies": {
     "@types/node": "^26.6.5",
-    "typescript": "^7.0.2"
+    "typescript": "7.0.2"
   },
   "files": "[\"dist\"]"
 }
