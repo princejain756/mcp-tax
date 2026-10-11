@@ -47,8 +47,8 @@ should scare you.
 ## Install
 
 ```bash
-npx mcp-tax            # run it once, no install
-npm i -g mcp-tax       # or keep it around
+npx github:princejain756/mcp-tax   # run it once, no install
+npm i -g mcp-tax                   # or keep it around (npm publish pending)
 ```
 
 Requires Node 18+. Servers are spawned exactly as your client would spawn them
