@@ -1,0 +1,25 @@
+{
+  "name": "mcp-tax",
+  "version": "1.0.0",
+  "description": "How many tokens your MCP servers burn before you type a word",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "mcp-tax": "./dist/cli.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.1",
+    "gpt-tokenizer": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "typescript": "^7.0.2"
+  },
+  "files": "[\"dist\"]"
+}
