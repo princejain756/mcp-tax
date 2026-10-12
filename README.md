@@ -8,7 +8,7 @@ Every tool, prompt and resource an MCP server exposes gets serialized into your
 model's context window. Add a few servers and the meter is already running.
 
 ```bash
-npx mcp-tax
+npx mcp-tax-cli
 ```
 
 ```
@@ -49,8 +49,8 @@ should scare you.
 ## Install
 
 ```bash
-npx github:princejain756/mcp-tax   # run it once, no install
-npm i -g mcp-tax                   # or keep it around (npm publish pending)
+npx mcp-tax-cli   # run it once, no install
+npm i -g mcp-tax-cli            # or keep it around
 ```
 
 Requires Node 18+. Servers are spawned exactly as your client would spawn them

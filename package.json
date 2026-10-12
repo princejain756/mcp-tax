@@ -1,6 +1,6 @@
 {
-  "name": "mcp-tax",
-  "version": "1.0.0",
+  "name": "mcp-tax-cli",
+  "version": "1.0.1",
   "description": "How many tokens your MCP servers burn before you type a word",
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,7 @@
   "license": "MIT",
   "type": "module",
   "bin": {
-    "mcp-tax": "./dist/cli.js"
+    "mcp-tax-cli": "./dist/cli.js"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.32.1",
