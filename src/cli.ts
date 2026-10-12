@@ -7,6 +7,7 @@ import { homedir } from "node:os";
 import { join } from "node:path";
 
 type ServerSpec = { command: string; args?: string[]; env?: Record<string, string> };
+type ToolDetail = { server: string; name: string; tokens: number; descTokens: number; schemaTokens: number };
 type ServerResult = {
   name: string;
   source: string;
@@ -15,6 +16,8 @@ type ServerResult = {
   prompts: number;
   resources: number;
   top: string;
+  toolDetails: ToolDetail[];
+  dump?: unknown;
   error?: string;
 };
 
@@ -82,16 +85,18 @@ async function measure(name: string, source: string, spec: ServerSpec): Promise<
     const resourceText = resourceList.map((r) => `${r.name}\n${r.description ?? ""}`).join("\n");
     const total = tokens(toolText) + tokens(promptText) + tokens(resourceText);
 
-    // biggest single tool description
-    let top = "";
-    let topN = 0;
-    for (const t of toolList) {
-      const n = tokens(describe([t]));
-      if (n > topN) { topN = n; top = `${t.name} (${n})`; }
-    }
-    return { name, source, tokens: total, tools: toolList.length, prompts: promptList.length, resources: resourceList.length, top };
+    const toolDetails: ToolDetail[] = toolList.map((t) => ({
+      server: name,
+      name: t.name,
+      tokens: tokens(describe([t])),
+      descTokens: tokens(t.description ?? ""),
+      schemaTokens: tokens(JSON.stringify(t.inputSchema ?? {})),
+    }));
+    const biggest = toolDetails.reduce<ToolDetail | null>((a, t) => (t.tokens > (a?.tokens ?? 0) ? t : a), null);
+    const dump = { tools: toolList, prompts: promptList, resources: resourceList };
+    return { name, source, tokens: total, tools: toolList.length, prompts: promptList.length, resources: resourceList.length, top: biggest ? `${biggest.name} (${biggest.tokens})` : "", toolDetails, dump };
   } catch (e) {
-    return { name, source, tokens: 0, tools: 0, prompts: 0, resources: 0, top: "", error: String(e).slice(0, 80) };
+    return { name, source, tokens: 0, tools: 0, prompts: 0, resources: 0, top: "", toolDetails: [], error: String(e).slice(0, 80) };
   } finally {
     try { await client.close(); } catch {}
     try { await transport.close(); } catch {}
@@ -104,6 +109,8 @@ function fmt(n: number): string {
 
 async function main() {
   const json = process.argv.includes("--json");
+  const dumpIdx = process.argv.indexOf("--dump");
+  const dumpPath = dumpIdx >= 0 ? (process.argv[dumpIdx + 1] && !process.argv[dumpIdx + 1].startsWith("-") ? process.argv[dumpIdx + 1] : "mcp-tools.json") : null;
   const servers = discoverServers();
   if (servers.length === 0) {
     console.log("No MCP servers found in Claude Desktop, Claude Code, Cursor, or .mcp.json.");
@@ -117,6 +124,13 @@ async function main() {
   const ok = results.filter((r) => !r.error).sort((a, b) => b.tokens - a.tokens);
   const failed = results.filter((r) => r.error);
   const total = ok.reduce((a, r) => a + r.tokens, 0);
+
+  if (dumpPath) {
+    const payload = Object.fromEntries(ok.map((r) => [r.name, r.dump]));
+    const { writeFileSync } = await import("node:fs");
+    writeFileSync(dumpPath, JSON.stringify(payload, null, 2));
+    console.log(`Wrote all tool schemas to ${dumpPath} — trim descriptions there, then diff the tokens.\n`);
+  }
 
   if (json) {
     console.log(JSON.stringify({ total, servers: ok, failed }, null, 2));
@@ -133,7 +147,14 @@ async function main() {
   for (const c of CONTEXT_WINDOWS) {
     console.log(`  ${(100 * total / c).toFixed(1)}% of a ${fmt(c)} context window`);
   }
-  if (ok.length && ok[0].top) console.log(`\nBiggest tool schema: ${ok[0].top} tokens`);
+  const allTools = ok.flatMap((r) => r.toolDetails).sort((a, b) => b.tokens - a.tokens).slice(0, 5);
+  if (allTools.length) {
+    console.log(`\nMost expensive tools:`);
+    const tw = Math.max(...allTools.map((t) => (t.server + "/" + t.name).length));
+    for (const t of allTools) {
+      console.log(`  ${(t.server + "/" + t.name).padEnd(tw)}  ${fmt(t.tokens)}  (desc ${fmt(t.descTokens)} + schema ${fmt(t.schemaTokens)})`);
+    }
+  }
   console.log(`\n(Token counts use o200k — an approximation; your client's tokenizer may differ.)`);
 }
 
