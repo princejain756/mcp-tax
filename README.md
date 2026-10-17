@@ -56,6 +56,12 @@ npm i -g mcp-tax-cli            # or keep it around
 Requires Node 18+. Servers are spawned exactly as your client would spawn them
 (`npx`, `uvx`, or any command in the config).
 
+## Agent skill
+
+Also on [Agensi](https://www.agensi.io/skills/mcp-tax) as an installable agent
+skill: same audit, packaged with a runner script and a reclaim playbook so
+your agent can measure and act on it in one step.
+
 ## Leaderboard
 
 Real measurements of popular servers, no API key required:
