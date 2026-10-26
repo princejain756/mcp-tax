@@ -1,5 +1,9 @@
 # mcp-tax
 
+[![npm](https://img.shields.io/npm/v/mcp-tax-cli)](https://www.npmjs.com/package/mcp-tax-cli)
+[![ci](https://github.com/princejain756/mcp-tax/actions/workflows/ci.yml/badge.svg)](https://github.com/princejain756/mcp-tax/actions/workflows/ci.yml)
+[![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+
 **How many tokens do your MCP servers burn before you type a word?**
 
 ![mcp-tax](social.png)

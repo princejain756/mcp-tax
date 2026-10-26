@@ -2,19 +2,36 @@
   "name": "mcp-tax-cli",
   "version": "1.0.1",
   "description": "How many tokens your MCP servers burn before you type a word",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
-    "prepare": "tsc"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "MIT",
+  "main": "dist/cli.js",
   "type": "module",
   "bin": {
-    "mcp-tax-cli": "./dist/cli.js"
+    "mcp-tax-cli": "./dist/cli.js",
+    "mcp-tax": "./dist/cli.js"
   },
+  "scripts": {
+    "build": "tsc",
+    "prepare": "tsc",
+    "test": "npm run build"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "tokens",
+    "context-window",
+    "cli",
+    "ai-agents"
+  ],
+  "author": "Prince Jain",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/princejain756/mcp-tax.git"
+  },
+  "homepage": "https://github.com/princejain756/mcp-tax",
+  "bugs": "https://github.com/princejain756/mcp-tax/issues",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.32.1",
     "gpt-tokenizer": "^4.0.0"
@@ -23,5 +40,7 @@
     "@types/node": "^26.6.5",
     "typescript": "7.0.2"
   },
-  "files": "[\"dist\"]"
+  "files": [
+    "dist"
+  ]
 }
